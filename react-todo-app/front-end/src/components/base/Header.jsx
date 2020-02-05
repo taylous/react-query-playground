@@ -108,10 +108,12 @@ const Home = () => {
 
   const handleDrawerOpen = event => {
     console.log(event.target);
+    setDrawerOpen(true);
   };
 
   const handleDrawerClose = event => {
     console.log(event.target);
+    setDrawerOpen(false);
   };
 
   const menuId = 'primary-search-account-menu';
@@ -173,7 +175,7 @@ const Home = () => {
 
   return (
     <div className={classes.grow}>
-      <Drawer drawerOpen={drawerOpen} handleDrawerOpen={handleDrawerOpen} />
+      <Drawer drawerOpen={drawerOpen} handleDrawerClose={handleDrawerClose} />
       <AppBar position="static" style={{ backgroundColor: 'black' }}>
         <Toolbar>
           <IconButton

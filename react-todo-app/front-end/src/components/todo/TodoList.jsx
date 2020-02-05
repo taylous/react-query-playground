@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function generate(element) {
-  return [0, 1, 2, 3, 4 ,5 ,6 ,7 ,8 , 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map(value =>
+  return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map(value =>
     React.cloneElement(element, {
       key: value,
     }),
@@ -34,15 +34,13 @@ function generate(element) {
 }
 
 const Home = () => {
-
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-
       <Grid container>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h6" className={classes.title}>
+        <Grid item xs={12} md={12}>
+          <Typography variant="h2" className={classes.title}>
             Avatar with text and icon
           </Typography>
           <div className={classes.demo}>
@@ -54,10 +52,7 @@ const Home = () => {
                       <FolderIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText
-                    primary="Single-line item"
-                    secondary="HELLO"
-                  />
+                  <ListItemText primary="Single-line item" secondary="HELLO" />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="delete">
                       <DeleteIcon />
@@ -71,6 +66,6 @@ const Home = () => {
       </Grid>
     </div>
   );
-}
+};
 
 export default Home;

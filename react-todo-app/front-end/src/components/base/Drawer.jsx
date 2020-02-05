@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -18,15 +20,16 @@ const useStyles = makeStyles({
   },
 });
 
-const DrawerComponent = props => {
-  console.log(props);
+const initiateProps = {
+  drawerOpen: false,
+  handleDrawerClose: () => {},
+};
+
+const DrawerComponent = ({ drawerOpen, handleDrawerClose } = initiateProps) => {
   const classes = useStyles();
-  const { drawerOpen, handleDrawerOpen } = props;
-  // const [drawerOpen, setDrawerOpen] = useState(props.drawerOpen);
 
   const toggleDrawer = (side, open) => event => {
     console.log(event);
-    handleDrawerOpen(open);
   };
 
   const sideList = side => (
@@ -58,11 +61,16 @@ const DrawerComponent = props => {
 
   return (
     <div>
-      <Drawer open={drawerOpen} onClose={toggleDrawer('left', false)}>
+      <Drawer open={drawerOpen} onClose={handleDrawerClose}>
         {sideList('left')}
       </Drawer>
     </div>
   );
+};
+
+DrawerComponent.propTypes = {
+  drawerOpen: PropTypes.bool,
+  handleDrawerClose: PropTypes.func,
 };
 
 export default DrawerComponent;
