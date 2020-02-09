@@ -20,12 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-const initiateProps = {
-  drawerOpen: false,
-  handleDrawerClose: () => {},
-};
-
-const DrawerComponent = ({ drawerOpen, handleDrawerClose } = initiateProps) => {
+const DrawerComponent = ({ drawerOpen, handleDrawerClose }) => {
   const classes = useStyles();
 
   const toggleDrawer = (side, open) => event => {
@@ -40,7 +35,7 @@ const DrawerComponent = ({ drawerOpen, handleDrawerClose } = initiateProps) => {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+        {['MyPage'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
             <ListItemText primary={text} />
@@ -49,7 +44,7 @@ const DrawerComponent = ({ drawerOpen, handleDrawerClose } = initiateProps) => {
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {['login', 'logout', 'register'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
             <ListItemText primary={text} />
@@ -68,9 +63,9 @@ const DrawerComponent = ({ drawerOpen, handleDrawerClose } = initiateProps) => {
   );
 };
 
-DrawerComponent.propTypes = {
-  drawerOpen: PropTypes.bool,
-  handleDrawerClose: PropTypes.func,
-};
+// DrawerComponent.propTypes = {
+//   drawerOpen: PropTypes.bool,
+//   handleDrawerClose: PropTypes.func,
+// };
 
 export default DrawerComponent;

@@ -10,6 +10,10 @@ import Header from './components/base/Header';
 import Footer from './components/base/Footer';
 import Home from './components/base/Home';
 
+// Import Login and Register View
+import Login from './views/Login';
+import Register from './views/Register';
+
 const useStyle = makeStyles({
   main: {
     backgroundColor: '#b8b8b8b',
@@ -24,6 +28,8 @@ const App = () => {
       <Container maxWidth="md">
         <BrowserRouter>
           <Route exact path="/" component={Home} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
         </BrowserRouter>
       </Container>
       <Footer />
