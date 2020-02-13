@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 // Material UI
-import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Import Base Components
@@ -24,15 +23,13 @@ const useStyle = makeStyles({
 const App = () => {
   return (
     <div className={useStyle.main}>
-      <Header />
-      <Container maxWidth="md">
-        <BrowserRouter>
-          <Route exact path="/" component={Home} />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-        </BrowserRouter>
-      </Container>
-      <Footer />
+      <BrowserRouter>
+        <Header />
+        <Route exact path={['/', '/home']} component={Home} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <Footer />
+      </BrowserRouter>
     </div>
   );
 };

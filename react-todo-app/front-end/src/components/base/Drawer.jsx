@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -35,10 +35,10 @@ const DrawerComponent = ({ drawerOpen, handleDrawerClose }) => {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List>
-        {['MyPage'].map((text, index) => (
+        {['home', 'mypage'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
+            <Link to={`/${text}`}>{text}</Link>
           </ListItem>
         ))}
       </List>
@@ -47,7 +47,7 @@ const DrawerComponent = ({ drawerOpen, handleDrawerClose }) => {
         {['login', 'logout', 'register'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
+            <Link to={`/${text}`}>{text}</Link>
           </ListItem>
         ))}
       </List>

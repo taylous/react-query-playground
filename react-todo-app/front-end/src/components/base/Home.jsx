@@ -1,4 +1,5 @@
 import React from 'react';
+import Container from '@material-ui/core/Container';
 
 // Import Components
 import TodoList from '../todo/TodoList';
@@ -6,7 +7,9 @@ import TodoList from '../todo/TodoList';
 const Home = () => {
   return (
     <div>
-      <TodoList />
+      <Container maxWidth="md">
+        <TodoList />
+      </Container>
     </div>
   );
 }
