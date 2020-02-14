@@ -5,9 +5,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Import Base Components
-import Header from './components/base/Header';
-import Footer from './components/base/Footer';
-import Home from './components/base/Home';
+import MainFrame from './components/base/MainFrame';
 
 // Import Login and Register View
 import Login from './views/Login';
@@ -21,14 +19,15 @@ const useStyle = makeStyles({
 });
 
 const App = () => {
+
+  const classes = useStyle();
+
   return (
-    <div className={useStyle.main}>
+    <div className={classes.main}>
       <BrowserRouter>
-        <Header />
-        <Route exact path={['/', '/home']} component={Home} />
+        <Route exact path={['/', '/home']} component={MainFrame} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <Footer />
       </BrowserRouter>
     </div>
   );

@@ -1,71 +1,99 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import FolderIcon from '@material-ui/icons/Folder';
-import DeleteIcon from '@material-ui/icons/Delete';
+import React, { useState } from "react";
+import {
+  GridList,
+  Grid,
+  makeStyles,
+  MenuItem,
+  FormControl,
+  Select
+} from "@material-ui/core";
+import TuneIcon from "@material-ui/icons/Tune";
+import VoteGridItem from './VoteGridItem';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
-    maxWidth: '100%',
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    overflow: "hidden",
+    backgroundColor: theme.palette.background.paper
   },
-  demo: {
-    backgroundColor: theme.palette.background.paper,
+
+  gridList: {
+    width: "100%"
   },
-  title: {
-    margin: theme.spacing(4, 0, 2),
-  },
+  VoteGridListGridItem: {
+    padding: "5px 5px 0 10px",
+    color: "#5D5D5D"
+  }
 }));
 
-function generate(element) {
-  return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map(value =>
-    React.cloneElement(element, {
-      key: value,
-    }),
-  );
-}
-
-const Home = () => {
+const ImageGridFilter = props => {
+  const { filterItem, onChangeFilterItem } = props;
   const classes = useStyles();
 
+  const items = [
+    { key: "default", value: "Filter", disabled: true },
+    { key: "recently", value: "Recently", disabled: false },
+    { key: "comments", value: "Most comments", disabled: false },
+    { key: "votes", value: "Most Votes", disabled: false }
+  ];
+
   return (
-    <div className={classes.root}>
-      <Grid container>
-        <Grid item xs={12} md={12}>
-          <Typography variant="h2" className={classes.title}>
-            Avatar with text and icon
-          </Typography>
-          <div className={classes.demo}>
-            <List dense>
-              {generate(
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <FolderIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary="Single-line item" secondary="HELLO" />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>,
-              )}
-            </List>
-          </div>
-        </Grid>
-      </Grid>
-    </div>
+    <FormControl className={classes.formControl}>
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={filterItem}
+        onChange={onChangeFilterItem}
+        className={classes.ImageGridFilterSelect}
+        disableUnderline
+      >
+        {items.map(item => (
+          <MenuItem key={item.key} value={item.key} disabled={item.disabled}>
+            {item.value}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
 
-export default Home;
+const TodoList = () => {
+  const classes = useStyles();
+
+  const [filterItem, setFilterItem] = useState("default");
+
+  const onChangeFilterItem = event => {
+    setFilterItem(event.target.value);
+  };
+
+  return (
+    <div className={classes.root}>
+      <Grid
+        container
+        alignItems="center"
+        className={classes.VoteGridListGrid}
+      >
+        <Grid item className={classes.VoteGridListGridItem}>
+          <TuneIcon />
+        </Grid>
+        <Grid item>
+          <ImageGridFilter
+            filterItem={filterItem}
+            onChangeFilterItem={onChangeFilterItem}
+          />
+        </Grid>
+      </Grid>
+      <GridList className={classes.gridList} cols={3} cellHeight="auto">
+        >
+        {new Array(50).fill("").map((x, index) => (
+          <Grid item key={index}>
+            <VoteGridItem itemData={x} index={index} />
+          </Grid>
+        ))}
+      </GridList>
+    </div>
+  );
+};
+export default TodoList;
