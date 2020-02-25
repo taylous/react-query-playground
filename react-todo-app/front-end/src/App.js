@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 // Import Base Components
-import Layout from './components/base/Layout';
+import Header from './components/base/Header';
+import Footer from './components/base/Footer';
 import MainFrame from './components/base/MainFrame';
 
 // Import User Components
@@ -11,15 +12,17 @@ import Register from './views/Register';
 
 const App = () => {
   return (
-    <Layout>
+    <>
       <BrowserRouter>
+        <Header />
         <Switch>
-          <Route exact path="/" component={MainFrame} />
+          <Route exact path={["/", "/home"]} component={MainFrame} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
         </Switch>
+        <Footer />
       </BrowserRouter>
-    </Layout>
+    </>
   );
 };
 

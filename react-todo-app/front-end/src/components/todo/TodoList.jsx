@@ -1,79 +1,116 @@
-import React from 'react';
-import MaterialTable from 'material-table';
+import * as React from 'react';
+import Paper from '@material-ui/core/Paper';
+import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react-scheduler';
+import {
+  Scheduler,
+  WeekView,
+  DateNavigator,
+  TodayButton,
+  Appointments,
+  AppointmentTooltip,
+  AppointmentForm,
+  DragDropProvider,
+  Toolbar,
+  ViewSwitcher,
+  MonthView,
+  DayView,
+  ConfirmationDialog,
+} from '@devexpress/dx-react-scheduler-material-ui';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
-const TodoList = () => {
-  const [state, setState] = React.useState({
-    columns: [
-      { title: 'Name', field: 'name' },
-      { title: 'Surname', field: 'surname' },
-      { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-      {
-        title: 'Birth Place',
-        field: 'birthCity',
-        lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-      },
-    ],
-    data: [
-      { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-    ],
-  });
+// Import test data
+import appointments from '../../assets/demo';
 
-  return (
-    <MaterialTable
-      title="Editable Example"
-      columns={state.columns}
-      data={state.data}
-      editable={{
-        onRowAdd: newData =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              setState(prevState => {
-                const data = [...prevState.data];
-                data.push(newData);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
-                setState(prevState => {
-                  const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
-                  return { ...prevState, data };
-                });
-              }
-            }, 600);
-          }),
-        onRowDelete: oldData =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              setState(prevState => {
-                const data = [...prevState.data];
-                data.splice(data.indexOf(oldData), 1);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-      }}
-    />
-  );
-};
+export default class Demo extends React.PureComponent {
+  constructor(props) {
+    super(props);
 
-export default TodoList;
+    this.state = {
+      data: appointments,
+      currentViewName: 'work-week',
+    };
+    this.currentViewNameChange = currentViewName => {
+      this.setState({ currentViewName });
+    };
+
+    this.commitChanges = this.commitChanges.bind(this);
+  }
+
+  commitChanges({ added, changed, deleted }) {
+    console.group('commitChanges');
+    console.log('added: ', added);
+    console.log('changed: ', changed);
+    console.log('deleted: ', deleted);
+    console.groupEnd();
+
+    this.setState(state => {
+      let { data } = state;
+      if (added) {
+        const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
+        data = [...data, { id: startingAddedId, ...added }];
+      }
+      if (changed) {
+        data = data.map(appointment =>
+          changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment,
+        );
+      }
+      if (deleted !== undefined) {
+        data = data.filter(appointment => appointment.id !== deleted);
+      }
+      return { data };
+    });
+  }
+
+  render() {
+    const { data, currentViewName } = this.state;
+
+    return (
+      <div>
+        <Typography component="div">
+          <Box fontSize="h2.fontSize" m={1}>
+            Scheduler
+          </Box>
+          <Box fontSize={16} m={1}>
+            Check out what you need to do.
+          </Box>
+        </Typography>
+
+        <Paper>
+          <Scheduler data={data}>
+            <ViewState
+              defaultCurrentDate={new Date()}
+              currentViewName={currentViewName}
+              onCurrentViewNameChange={this.currentViewNameChange}
+            />
+            <EditingState onCommitChanges={this.commitChanges} />
+            <IntegratedEditing />
+            <ConfirmationDialog />
+
+            <WeekView startDayHour={9} endDayHour={24} />
+            <WeekView
+              name="work-week"
+              displayName="Work Week"
+              excludedDays={[0, 6]}
+              startDayHour={9}
+              endDayHour={19}
+            />
+            <MonthView />
+            <DayView />
+            <Toolbar />
+
+            <DateNavigator />
+            <TodayButton />
+            <ViewSwitcher />
+
+            <Appointments />
+            <AppointmentTooltip showOpenButton showDeleteButton />
+            <AppointmentForm />
+
+            <DragDropProvider />
+          </Scheduler>
+        </Paper>
+      </div>
+    );
+  }
+}

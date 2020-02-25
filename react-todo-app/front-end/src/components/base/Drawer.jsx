@@ -18,27 +18,26 @@ const useStyles = makeStyles({
   fullList: {
     width: 'auto',
   },
+  linkDeco: {
+    textDecoration: 'none',
+    textTransform: 'uppercase',
+    color: 'black'
+  }
 });
 
 const DrawerComponent = ({ drawerOpen, handleDrawerClose }) => {
   const classes = useStyles();
 
-  const toggleDrawer = (side, open) => event => {
-    console.log(event);
-  };
-
-  const sideList = side => (
+  const sideList = () => (
     <div
       className={classes.list}
       role="presentation"
-      onClick={toggleDrawer(side, false)}
-      onKeyDown={toggleDrawer(side, false)}
     >
       <List>
         {['home', 'mypage'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <Link to={`/${text}`}>{text}</Link>
+            <Link className={classes.linkDeco} to={`/${text}`}>{text}</Link>
           </ListItem>
         ))}
       </List>
@@ -47,7 +46,7 @@ const DrawerComponent = ({ drawerOpen, handleDrawerClose }) => {
         {['login', 'logout', 'register'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <Link to={`/${text}`}>{text}</Link>
+            <Link className={classes.linkDeco} to={`/${text}`}>{text}</Link>
           </ListItem>
         ))}
       </List>
@@ -57,7 +56,7 @@ const DrawerComponent = ({ drawerOpen, handleDrawerClose }) => {
   return (
     <div>
       <Drawer open={drawerOpen} onClose={handleDrawerClose}>
-        {sideList('left')}
+        {sideList()}
       </Drawer>
     </div>
   );

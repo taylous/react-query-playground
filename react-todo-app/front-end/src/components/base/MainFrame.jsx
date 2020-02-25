@@ -4,15 +4,13 @@ import React from 'react';
 import TodoList from '../todo/TodoList';
 
 const MainFrame = () => {
-
   return (
     <div>
-      <TodoList />
-      <TodoList />
-      <TodoList />
-      <TodoList />
+      <div style={{margin: 100}}>
+        <TodoList />
+      </div>
     </div>
-  )
+  );
 };
 
 export default MainFrame;

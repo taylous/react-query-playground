@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     bottom: 0,
     width: '100%',
+    zIndex: 1000,
   },
   icons: {
     width: '100%',
