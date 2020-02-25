@@ -1,16 +1,16 @@
 import React from 'react';
 
-// Import Components
+// Import TodoList Component
 import TodoList from '../todo/TodoList';
-import Layout from './Layout';
 
-
-const Home = () => {
+const MainFrame = () => {
   return (
-    <Layout>
-      <TodoList />
-    </Layout>
+    <div>
+      <div style={{margin: 100}}>
+        <TodoList />
+      </div>
+    </div>
   );
-}
+};
 
-export default Home;
+export default MainFrame;

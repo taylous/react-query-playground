@@ -1,99 +1,116 @@
-import React, { useState } from "react";
+import * as React from 'react';
+import Paper from '@material-ui/core/Paper';
+import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react-scheduler';
 import {
-  GridList,
-  Grid,
-  makeStyles,
-  MenuItem,
-  FormControl,
-  Select
-} from "@material-ui/core";
-import TuneIcon from "@material-ui/icons/Tune";
-import VoteGridItem from './VoteGridItem';
+  Scheduler,
+  WeekView,
+  DateNavigator,
+  TodayButton,
+  Appointments,
+  AppointmentTooltip,
+  AppointmentForm,
+  DragDropProvider,
+  Toolbar,
+  ViewSwitcher,
+  MonthView,
+  DayView,
+  ConfirmationDialog,
+} from '@devexpress/dx-react-scheduler-material-ui';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    overflow: "hidden",
-    backgroundColor: theme.palette.background.paper
-  },
+// Import test data
+import appointments from '../../assets/demo';
 
-  gridList: {
-    width: "100%"
-  },
-  VoteGridListGridItem: {
-    padding: "5px 5px 0 10px",
-    color: "#5D5D5D"
+export default class Demo extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: appointments,
+      currentViewName: 'work-week',
+    };
+    this.currentViewNameChange = currentViewName => {
+      this.setState({ currentViewName });
+    };
+
+    this.commitChanges = this.commitChanges.bind(this);
   }
-}));
 
-const ImageGridFilter = props => {
-  const { filterItem, onChangeFilterItem } = props;
-  const classes = useStyles();
+  commitChanges({ added, changed, deleted }) {
+    console.group('commitChanges');
+    console.log('added: ', added);
+    console.log('changed: ', changed);
+    console.log('deleted: ', deleted);
+    console.groupEnd();
 
-  const items = [
-    { key: "default", value: "Filter", disabled: true },
-    { key: "recently", value: "Recently", disabled: false },
-    { key: "comments", value: "Most comments", disabled: false },
-    { key: "votes", value: "Most Votes", disabled: false }
-  ];
+    this.setState(state => {
+      let { data } = state;
+      if (added) {
+        const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
+        data = [...data, { id: startingAddedId, ...added }];
+      }
+      if (changed) {
+        data = data.map(appointment =>
+          changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment,
+        );
+      }
+      if (deleted !== undefined) {
+        data = data.filter(appointment => appointment.id !== deleted);
+      }
+      return { data };
+    });
+  }
 
-  return (
-    <FormControl className={classes.formControl}>
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={filterItem}
-        onChange={onChangeFilterItem}
-        className={classes.ImageGridFilterSelect}
-        disableUnderline
-      >
-        {items.map(item => (
-          <MenuItem key={item.key} value={item.key} disabled={item.disabled}>
-            {item.value}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-};
+  render() {
+    const { data, currentViewName } = this.state;
 
-const TodoList = () => {
-  const classes = useStyles();
+    return (
+      <div>
+        <Typography component="div">
+          <Box fontSize="h2.fontSize" m={1}>
+            Scheduler
+          </Box>
+          <Box fontSize={16} m={1}>
+            Check out what you need to do.
+          </Box>
+        </Typography>
 
-  const [filterItem, setFilterItem] = useState("default");
+        <Paper>
+          <Scheduler data={data}>
+            <ViewState
+              defaultCurrentDate={new Date()}
+              currentViewName={currentViewName}
+              onCurrentViewNameChange={this.currentViewNameChange}
+            />
+            <EditingState onCommitChanges={this.commitChanges} />
+            <IntegratedEditing />
+            <ConfirmationDialog />
 
-  const onChangeFilterItem = event => {
-    setFilterItem(event.target.value);
-  };
+            <WeekView startDayHour={9} endDayHour={24} />
+            <WeekView
+              name="work-week"
+              displayName="Work Week"
+              excludedDays={[0, 6]}
+              startDayHour={9}
+              endDayHour={19}
+            />
+            <MonthView />
+            <DayView />
+            <Toolbar />
 
-  return (
-    <div className={classes.root}>
-      <Grid
-        container
-        alignItems="center"
-        className={classes.VoteGridListGrid}
-      >
-        <Grid item className={classes.VoteGridListGridItem}>
-          <TuneIcon />
-        </Grid>
-        <Grid item>
-          <ImageGridFilter
-            filterItem={filterItem}
-            onChangeFilterItem={onChangeFilterItem}
-          />
-        </Grid>
-      </Grid>
-      <GridList className={classes.gridList} cols={3} cellHeight="auto">
-        >
-        {new Array(50).fill("").map((x, index) => (
-          <Grid item key={index}>
-            <VoteGridItem itemData={x} index={index} />
-          </Grid>
-        ))}
-      </GridList>
-    </div>
-  );
-};
-export default TodoList;
+            <DateNavigator />
+            <TodayButton />
+            <ViewSwitcher />
+
+            <Appointments />
+            <AppointmentTooltip showOpenButton showDeleteButton />
+            <AppointmentForm />
+
+            <DragDropProvider />
+          </Scheduler>
+        </Paper>
+      </div>
+    );
+  }
+}

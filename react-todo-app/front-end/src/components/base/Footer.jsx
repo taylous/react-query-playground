@@ -9,9 +9,11 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    position: 'absolute',
+    position: 'fixed',
+    left: 0,
     bottom: 0,
     width: '100%',
+    zIndex: 1000,
   },
   icons: {
     width: '100%',

@@ -1,18 +1,34 @@
 import React from 'react';
-import './Sign.css';
+import { makeStyles } from '@material-ui/core/styles';
+
+import { Box, TextField, Typography } from '@material-ui/core';
+
+const useStyles = makeStyles({
+  root: {
+    width: '100%',
+    backgroundColor: 'white'
+  }
+});
 
 const Login = () => {
+  const classes = useStyles();
 
   return (
-    <div className="login">
-      <h1>Login</h1>
-      <form method="post">
-        <input type="text" name="u" placeholder="Username" required="required" />
-        <input type="password" name="p" placeholder="Password" required="required" />
-        <button type="submit" className="btn btn-primary btn-block btn-large">Let me in.</button>
-      </form>
-    </div>   
+    <div className={classes.root}>
+      <Typography component="div">
+        <Box textAlign="center" fontSize="h2.fontSize">
+          Login
+        </Box>
+      </Typography>
+      <Box>
+        <form noValidate autoComplete="off">
+          <TextField id="standard-basic" label="Standard" />
+          <TextField id="filled-basic" label="Filled" variant="filled" />
+          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+        </form>
+      </Box>
+    </div>
   );
-}
+};
 
 export default Login;
