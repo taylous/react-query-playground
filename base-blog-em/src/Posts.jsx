@@ -6,7 +6,9 @@ import { PostDetail } from './PostDetail';
 const maxPostPage = 10;
 
 async function fetchPosts(pageNum) {
-  const response = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=10&_page=${pageNum}`);
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/posts?_limit=10&_page=${pageNum}`,
+  );
   return response.json();
 }
 
@@ -19,7 +21,9 @@ export function Posts() {
   useEffect(() => {
     if (currentPage < maxPostPage) {
       const nextPage = currentPage + 1;
-      queryClient.prefetchQuery(['posts', nextPage], () => fetchPosts(nextPage));
+      queryClient.prefetchQuery(['posts', nextPage], () => fetchPosts(nextPage), {
+        staleTime: 10000,
+      });
     }
   }, [currentPage, queryClient]);
 
@@ -58,13 +62,17 @@ export function Posts() {
    *        그러나 data가 cache에 있는 동안에는,
    *        refetching 동안 표시하는데 사용할 수 있습니다.
    */
-  const { data, isError, error, isLoading } = useQuery(['posts', currentPage], () => fetchPosts(currentPage), {
-    staleTime: 2000,
-    /**
-     * 사용자가 이전 page로 돌아간다고 해도 data를 유지하기 위한 option
-     */
-    keepPreviousData: true,
-  });
+  const { data, isError, error, isLoading } = useQuery(
+    ['posts', currentPage],
+    () => fetchPosts(currentPage),
+    {
+      staleTime: 2000,
+      /**
+       * 사용자가 이전 page로 돌아간다고 해도 data를 유지하기 위한 option
+       */
+      keepPreviousData: true,
+    },
+  );
 
   /**
    * 💡 isFetching

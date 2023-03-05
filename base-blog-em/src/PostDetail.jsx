@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 async function fetchComments(postId) {
